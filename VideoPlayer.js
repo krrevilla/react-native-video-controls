@@ -547,12 +547,7 @@ export default class VideoPlayer extends Component {
    * or duration. Formatted to look as 00:00.
    */
   calculateTime() {
-    if (this.state.showTimeRemaining) {
-      const time = this.state.duration - this.state.currentTime;
-      return `-${this.formatTime(time)}`;
-    }
-
-    return this.formatTime(this.state.currentTime);
+    return `${this.formatTime(this.state.currentTime)} / ${this.formatTime(this.state.duration)}`;
   }
 
   /**
@@ -952,12 +947,6 @@ export default class VideoPlayer extends Component {
     const backControl = this.props.disableBack
       ? this.renderNullControl()
       : this.renderBack();
-    const volumeControl = this.props.disableVolume
-      ? this.renderNullControl()
-      : this.renderVolume();
-    const fullscreenControl = this.props.disableFullscreen
-      ? this.renderNullControl()
-      : this.renderFullscreen();
 
     return (
       <Animated.View
@@ -974,10 +963,7 @@ export default class VideoPlayer extends Component {
           imageStyle={[styles.controls.vignette]}>
           <SafeAreaView style={styles.controls.topControlGroup}>
             {backControl}
-            <View style={styles.controls.pullRight}>
-              {volumeControl}
-              {fullscreenControl}
-            </View>
+            <Text style={styles.controls.titleText}>{this.props.title}</Text>
           </SafeAreaView>
         </ImageBackground>
       </Animated.View>
@@ -1047,9 +1033,6 @@ export default class VideoPlayer extends Component {
     const seekbarControl = this.props.disableSeekbar
       ? this.renderNullControl()
       : this.renderSeekbar();
-    const playPauseControl = this.props.disablePlayPause
-      ? this.renderNullControl()
-      : this.renderPlayPause();
 
     return (
       <Animated.View
@@ -1067,8 +1050,7 @@ export default class VideoPlayer extends Component {
           {seekbarControl}
           <SafeAreaView
             style={[styles.controls.row, styles.controls.bottomControlGroup]}>
-            {playPauseControl}
-            {this.renderTitle()}
+            {this.renderPlayPause()}
             {timerControl}
           </SafeAreaView>
         </ImageBackground>
@@ -1340,7 +1322,7 @@ const styles = {
     topControlGroup: {
       alignSelf: 'stretch',
       alignItems: 'center',
-      justifyContent: 'space-between',
+      // justifyContent: 'space-between',
       flexDirection: 'row',
       width: null,
       margin: 12,
@@ -1373,15 +1355,18 @@ const styles = {
     },
     titleText: {
       textAlign: 'center',
+      color: '#fff',
+      fontSize: 16
     },
     timer: {
-      width: 80,
+      // width: 80,
     },
     timerText: {
       backgroundColor: 'transparent',
       color: '#FFF',
       fontSize: 11,
       textAlign: 'right',
+      width: '100%'
     },
   }),
   volume: StyleSheet.create({
