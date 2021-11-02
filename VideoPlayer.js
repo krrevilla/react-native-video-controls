@@ -481,23 +481,9 @@ export default class VideoPlayer extends Component {
    * isFullscreen state.
    */
   _toggleFullscreen() {
-    let state = this.state;
-
-    state.isFullscreen = !state.isFullscreen;
-
-    if (this.props.toggleResizeModeOnFullscreen) {
-      state.resizeMode = state.isFullscreen === true ? 'cover' : 'contain';
+    if (this.player.ref?.presentFullscreenPlayer) {
+      this.player.ref.presentFullscreenPlayer()
     }
-
-    if (state.isFullscreen) {
-      typeof this.events.onEnterFullscreen === 'function' &&
-        this.events.onEnterFullscreen();
-    } else {
-      typeof this.events.onExitFullscreen === 'function' &&
-        this.events.onExitFullscreen();
-    }
-
-    this.setState(state);
   }
 
   /**
@@ -979,7 +965,7 @@ export default class VideoPlayer extends Component {
         source={require('./assets/img/back.png')}
         style={styles.controls.back}
       />,
-      this.events.onBack,
+      this.props.onBack,
       styles.controls.back,
     );
   }
@@ -1052,6 +1038,7 @@ export default class VideoPlayer extends Component {
             style={[styles.controls.row, styles.controls.bottomControlGroup]}>
             {this.renderPlayPause()}
             {timerControl}
+            {this.renderFullscreen()}
           </SafeAreaView>
         </ImageBackground>
       </Animated.View>
@@ -1199,6 +1186,7 @@ export default class VideoPlayer extends Component {
         <View style={[styles.player.container, this.styles.containerStyle]}>
           <Video
             {...this.props}
+            fullscreenAutorotate={true}
             ref={videoPlayer => (this.player.ref = videoPlayer)}
             resizeMode={this.state.resizeMode}
             volume={this.state.volume}
