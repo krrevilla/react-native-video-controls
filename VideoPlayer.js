@@ -188,6 +188,7 @@ export default class VideoPlayer extends Component {
   _onLoadStart() {
     let state = this.state;
     state.loading = true;
+    state.error = false;
     this.loadAnimation();
     this.setState(state);
 
@@ -207,6 +208,7 @@ export default class VideoPlayer extends Component {
     let state = this.state;
 
     state.duration = data.duration;
+    state.error = false;
     state.loading = false;
     this.setState(state);
 
