@@ -88,7 +88,7 @@ export default class VideoPlayer extends Component {
     this.events = {
       onError: this.props.onError || this._onError.bind(this),
       onBack: this.props.onBack || this._onBack.bind(this),
-      onEnd: this.props.onEnd || this._onEnd.bind(this),
+      onEnd: this._onEnd.bind(this),
       onScreenTouch: this._onScreenTouch.bind(this),
       onEnterFullscreen: this.props.onEnterFullscreen,
       onExitFullscreen: this.props.onExitFullscreen,
@@ -273,7 +273,10 @@ export default class VideoPlayer extends Component {
    * Either close the video or go to a
    * new page.
    */
-  _onEnd() {}
+  _onEnd() {
+    this.player.ref?.seek(0);
+    this.props.onEnd && this.props.onEnd();
+  }
 
   /**
    * Set the error state to true which then
